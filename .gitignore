@@ -1,0 +1,7 @@
+/node_modules/
+/dist/
+/data/
+.mongo-data/
+*.log
+*.bak
+npm-debug.log

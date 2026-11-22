@@ -1,0 +1,40 @@
+import { signout } from './api-auth.js'
+
+const auth = {
+  isAuthenticated() {
+    if (typeof window == "undefined")
+      return false
+
+    if (sessionStorage.getItem('jwt'))
+      return JSON.parse(sessionStorage.getItem('jwt'))
+    else
+      return false
+  },
+  authenticate(jwt, cb) {
+    if (typeof window !== "undefined")
+      sessionStorage.setItem('jwt', JSON.stringify(jwt))
+    cb()
+  },
+  clearJWT(cb) {
+    if (typeof window !== "undefined")
+      sessionStorage.removeItem('jwt')
+    cb()
+    //optional
+    signout().then((data) => {
+      document.cookie = "t=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+    })
+  },
+  updateUser(user, cb) {
+    if (typeof window !== "undefined") {
+      if (sessionStorage.getItem('jwt')) {
+        let authData = JSON.parse(sessionStorage.getItem('jwt'))
+        authData.user = { ...authData.user, ...user, photoVersion: Date.now() }
+        sessionStorage.setItem('jwt', JSON.stringify(authData))
+        window.dispatchEvent(new Event('authChange'))
+        if (cb) cb()
+      }
+    }
+  }
+}
+
+export default auth

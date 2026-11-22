@@ -1,0 +1,7 @@
+{
+    "verbose": false,
+    "watch": [
+      "./server"
+    ],
+    "exec": "node --openssl-legacy-provider ./node_modules/webpack/bin/webpack.js --mode=development --config webpack.config.server.js && node --openssl-legacy-provider ./dist/server.generated.js"
+}
